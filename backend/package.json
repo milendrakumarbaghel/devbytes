@@ -7,11 +7,16 @@
   "dependencies": {
     "@prisma/client": "^6.5.0",
     "@prisma/extension-accelerate": "^1.3.0",
+    "bcryptjs": "^3.0.2",
+    "cookie": "^1.0.2",
+    "esbuild": "^0.25.1",
     "hono": "^4.7.5",
-    "prisma": "^6.5.0"
+    "miniflare": "^4.20250321.0",
+    "prisma": "^6.5.0",
+    "youch": "^3.3.4"
   },
   "devDependencies": {
     "@cloudflare/workers-types": "^4.20250214.0",
-    "wrangler": "^4.4.0"
+    "wrangler": "^4.5.0"
   }
 }
