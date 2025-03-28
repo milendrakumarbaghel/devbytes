@@ -44,3 +44,47 @@ userController.post('signup', async (c: Context) => {
         });
     }
 })
+
+userController.post('signin', async (c: Context) => {
+    const prisma = new PrismaClient({
+        datasourceUrl: c.env.DATABASE_URL,
+    }).$extends(withAccelerate())
+
+    const body = await c.req.json();
+
+    if (!body.email || !body.password) {
+        c.status(400);
+        return c.json({ error: "email and password are required" });
+    }
+
+    try {
+        const user = await prisma.user.findUnique({
+            where: {
+                email: body.email
+            }
+        });
+
+        if (!user) {
+            c.status(403);
+            return c.json({ error: "invalid credentials (user not found)" });
+        }
+
+        const isValidPassword = await bcrypt.compare(body.password, user.password);
+
+        if (!isValidPassword) {
+            c.status(403);
+            return c.json({ error: "invalid credentials (password)" });
+        }
+
+        const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+        return c.json({
+            jwt: token
+        });
+    } catch (e) {
+        console.log(e);
+        c.status(500);
+        return c.json({
+            error: "error while logging in"
+        });
+    }
+})

@@ -1,15 +1,16 @@
 import { Hono } from 'hono'
 import { userRoute } from './routes/user.route'
 import { blogRoute } from './routes/blog.route'
-
-// const prisma = new PrismaClient().$extends(withAccelerate())
+import { authMiddleware } from './middlewares/authMiddleware';
 
 const app = new Hono<{
 	Bindings: {
 		DATABASE_URL: string,
-    JWT_SECRET: string,
+    	JWT_SECRET: string,
 	}
 }>();
+
+authMiddleware(app);
 
 app.route('/api/v1/', userRoute)
 app.route('/api/v1/', blogRoute)
