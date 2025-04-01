@@ -1,7 +1,7 @@
 import { Hono, Context } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
-import { sign } from 'hono/jwt'
+import { sign, verify } from 'hono/jwt'
 
 export const userController = new Hono<{
     Bindings: {
@@ -53,7 +53,8 @@ userController.post('signup', async (c: Context) => {
         const user = await prisma.user.create({
             data: {
                 email: body.email,
-                password: hashedPassword + ':' + salt // Store hash:salt format
+                password: hashedPassword + ':' + salt, // Store hash:salt format
+                name : body.name || null,
             }
         });
 
@@ -99,10 +100,56 @@ userController.post('signin', async (c: Context) => {
         }
 
         const token = await sign({ id: user.id }, c.env.JWT_SECRET);
+        // ✅ Backend does NOT store JWTs. The client should store it.
+        // The client should store the JWT in local storage or cookies.
+        // The client should send the JWT in the Authorization header for protected routes.
         return c.json({ jwt: token });
     } catch (e) {
         console.log(e);
         c.status(500);
         return c.json({ error: "error while logging in" });
+    }
+});
+
+userController.get('/signout', async (c: Context) => {
+    // ✅ Backend does NOT store JWTs. The client should remove it.
+    return c.json({ message: "Signed out. Remove JWT from client storage." });
+});
+
+userController.get('/me', async (c: Context) => {
+    const token = c.req.header('Authorization')?.split(' ')[1];
+    if (!token) {
+        c.status(401);
+        return c.json({ error: "unauthorized" });
+    }
+
+    try {
+        const payload = await verify(token, c.env.JWT_SECRET) as { id: string };
+        const userId: string = payload.id;
+
+        const prisma = new PrismaClient({
+            datasourceUrl: c.env.DATABASE_URL,
+        }).$extends(withAccelerate());
+
+        const user = await prisma.user.findUnique({
+            where: {
+                id: userId
+            },
+            select: {
+                id: true,
+                email: true,
+            }
+        });
+
+        if (!user) {
+            c.status(404);
+            return c.json({ error: "user not found" });
+        }
+
+        return c.json(user);
+    } catch (e) {
+        console.log(e);
+        c.status(401);
+        return c.json({ error: "invalid token" });
     }
 });
