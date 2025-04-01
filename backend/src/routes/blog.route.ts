@@ -1,6 +1,5 @@
 import { Hono } from 'hono'
 import { blogController } from '../controllers/blogController'
-import { authMiddleware } from '../middlewares/authMiddleware'
 
 export const blogRoute = new Hono<{
     Bindings: {

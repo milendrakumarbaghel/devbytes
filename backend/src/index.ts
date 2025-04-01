@@ -10,7 +10,8 @@ const app = new Hono<{
 	}
 }>();
 
-authMiddleware(app);
+// Middleware for authentication
+// authMiddleware(app);
 
 app.route('/api/v1/', userRoute)
 app.route('/api/v1/', blogRoute)
