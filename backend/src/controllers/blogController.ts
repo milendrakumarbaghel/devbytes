@@ -39,7 +39,7 @@ blogController.post('/', async (c: Context) => {
 	return c.json({ id: post.id });
 });
 
-blogController.put('/blog', async (c: Context) => {
+blogController.put('/updateblog', async (c: Context) => {
 	const userId = c.get('userId');
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL,
@@ -60,7 +60,7 @@ blogController.put('/blog', async (c: Context) => {
 	return c.text('Updated post');
 });
 
-blogController.get('/blog/:id', async (c: Context) => {
+blogController.get('/findblog/:id', async (c: Context) => {
 	const id = c.req.param('id');
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL,
@@ -78,7 +78,7 @@ blogController.get('/blog/:id', async (c: Context) => {
 	return c.json(post);
 });
 
-blogController.get('/blog/bulk', async (c: Context) => {
+blogController.get('/findAllBlogs', async (c: Context) => {
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL,
 	}).$extends(withAccelerate());
