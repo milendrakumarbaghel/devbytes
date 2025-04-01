@@ -2,7 +2,6 @@ import { Hono, Context } from 'hono'
 import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { sign } from 'hono/jwt'
-import bcrypt from 'bcryptjs'
 
 export const userController = new Hono<{
     Bindings: {
@@ -10,6 +9,30 @@ export const userController = new Hono<{
         JWT_SECRET: string,
     }
 }>();
+
+async function hashPassword(password: string, salt: string) {
+    const enc = new TextEncoder();
+    const key = await crypto.subtle.importKey(
+        "raw",
+        enc.encode(password),
+        { name: "PBKDF2" },
+        false,
+        ["deriveBits"]
+    );
+
+    const derivedKey = await crypto.subtle.deriveBits(
+        {
+            name: "PBKDF2",
+            salt: enc.encode(salt),
+            iterations: 100000,
+            hash: "SHA-256",
+        },
+        key,
+        256
+    );
+
+    return btoa(String.fromCharCode(...new Uint8Array(derivedKey)));
+}
 
 userController.post('signup', async (c: Context) => {
     const prisma = new PrismaClient({
@@ -24,26 +47,24 @@ userController.post('signup', async (c: Context) => {
     }
 
     try {
-        const hashedPassword = await bcrypt.hash(body.password, 10); // 10 is the salt rounds
+        const salt = crypto.randomUUID();
+        const hashedPassword = await hashPassword(body.password, salt);
+
         const user = await prisma.user.create({
             data: {
                 email: body.email,
-                password: hashedPassword
+                password: hashedPassword + ':' + salt // Store hash:salt format
             }
         });
 
         const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-        return c.json({
-            jwt: token
-        });
+        return c.json({ jwt: token });
     } catch (e) {
         c.status(403);
         console.log(e);
-        return c.json({
-            error: "error while signing up"
-        });
+        return c.json({ error: "error while signing up" });
     }
-})
+});
 
 userController.post('signin', async (c: Context) => {
     const prisma = new PrismaClient({
@@ -69,22 +90,19 @@ userController.post('signin', async (c: Context) => {
             return c.json({ error: "invalid credentials (user not found)" });
         }
 
-        const isValidPassword = await bcrypt.compare(body.password, user.password);
+        const [storedHash, salt] = user.password.split(':');
+        const hashedInputPassword = await hashPassword(body.password, salt);
 
-        if (!isValidPassword) {
+        if (hashedInputPassword !== storedHash) {
             c.status(403);
             return c.json({ error: "invalid credentials (password)" });
         }
 
         const token = await sign({ id: user.id }, c.env.JWT_SECRET);
-        return c.json({
-            jwt: token
-        });
+        return c.json({ jwt: token });
     } catch (e) {
         console.log(e);
         c.status(500);
-        return c.json({
-            error: "error while logging in"
-        });
+        return c.json({ error: "error while logging in" });
     }
-})
+});
