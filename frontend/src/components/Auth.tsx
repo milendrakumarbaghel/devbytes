@@ -3,8 +3,11 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
+
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const navigate = useNavigate();
+    const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
+    
     const [postInputs, setPostInputs] = useState<SignupInput>({
         name: "",
         email: "",
@@ -14,12 +17,13 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     async function sendRequest() {
         try {
             const response = await axios.post(
-                `/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
+                `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
                 postInputs
             );
 
-            // Assuming the JWT is in response.data.token
-            const jwt = response.data.token;
+            console.log("Response data:", response.data);
+            const jwt = response.data?.jwt;
+
             localStorage.setItem("token", jwt);
             navigate("/blogs");
         } catch (e) {

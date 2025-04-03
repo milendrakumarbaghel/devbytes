@@ -25,11 +25,11 @@ export const FullBlog = ({ blog }: { blog: Blog }) => {
             </div>
             <div className="flex pt-2">
               <div className="flex flex-col justify-center pr-2">
-                <Avatar size={2} name={blog.author.name || "Anonymous"} />
+                <Avatar size={2} name={blog.author?.name || "Anonymous"} />
               </div>
               <div>
                 <div className="text-lg md:text-xl font-bold">
-                  {blog.author.name || "Anonymous"}
+                  {blog.author?.name || "Anonymous"}
                 </div>
                 <div className="pt-1 md:pt-2 text-slate-500">
                   Blogs are the best way to share your thoughts with the world.
