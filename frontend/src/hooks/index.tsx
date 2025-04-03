@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import { BACKEND_URL } from "../config";
+
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
 
 
-export interface Blog  {
-        "content" : string,
-        "title" : string,
-        "author" : {
-            "name" : string
-        }
-        "id" : number
+export interface Blog {
+  "content": string,
+  "title": string,
+  "author": {
+    "name": string
+  }
+  "id": number
 }
-export const useBlog = ({id} : {id: string}) =>
-{
+export const useBlog = ({ id }: { id: string }) => {
   const [loading, setLoading] = useState(true);
   const [blog, setBlog] = useState<Blog>();
 
@@ -30,14 +30,14 @@ export const useBlog = ({id} : {id: string}) =>
         console.error("Error fetching blogs:", error);
         setLoading(false);
       }
-    } ;
+    };
 
     fetchBlogs();
   }, [id]); // Added dependency array to ensure useEffect runs only once
-    return  {
-      loading ,
-      blog ,
-    }
+  return {
+    loading,
+    blog,
+  }
 }
 export const useBlogs = () => {
   const [loading, setLoading] = useState(true);
