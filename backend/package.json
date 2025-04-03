@@ -5,11 +5,13 @@
     "deploy": "wrangler deploy --minify"
   },
   "dependencies": {
-    "@milendrakumarbaghel/blogginng-site": "^1.0.0",
+    "@milendrakumarbaghel/blogginng-site": "^1.0.1",
     "@prisma/client": "^6.5.0",
     "@prisma/extension-accelerate": "^1.3.0",
     "bcryptjs": "^3.0.2",
     "cookie": "^1.0.2",
+    "cor": "^0.0.0",
+    "cors": "^2.8.5",
     "esbuild": "^0.25.1",
     "hono": "^4.7.5",
     "miniflare": "^4.20250321.0",

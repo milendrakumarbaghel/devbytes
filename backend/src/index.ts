@@ -1,7 +1,7 @@
 import { Hono } from 'hono'
 import { userRoute } from './routes/user.route'
 import { blogRoute } from './routes/blog.route'
-import { authMiddleware } from './middlewares/authMiddleware';
+import { cors } from 'hono/cors';
 
 const app = new Hono<{
 	Bindings: {
@@ -10,8 +10,9 @@ const app = new Hono<{
 	}
 }>();
 
-// Middleware for authentication
-// authMiddleware(app);
+app.use(cors({
+  origin: 'http://localhost:5173'
+}));
 
 app.route('/api/v1/', userRoute)
 app.route('/api/v1/', blogRoute)
