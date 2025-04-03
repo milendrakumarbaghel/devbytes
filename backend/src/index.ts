@@ -10,9 +10,11 @@ const app = new Hono<{
 	}
 }>();
 
-app.use(cors({
-  origin: 'http://localhost:5173'
-}));
+app.use('*', cors({
+	origin: 'http://localhost:5173', // Change this to your frontend URL in production
+	allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+	allowHeaders: ['Content-Type', 'Authorization'],
+  }));
 
 app.route('/api/v1/', userRoute)
 app.route('/api/v1/', blogRoute)

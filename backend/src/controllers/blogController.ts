@@ -3,8 +3,8 @@ import { PrismaClient } from '@prisma/client/edge'
 import { withAccelerate } from '@prisma/extension-accelerate'
 import { verify } from 'hono/jwt'
 import { authMiddleware } from '../middlewares/authMiddleware';
-import { createBlogInput } from '@milendrakumarbaghel/blogginng-site';
-import { updateBlogInput } from '@milendrakumarbaghel/blogginng-site';
+import { createBlogInput } from '@milendrakumarbaghel/blogging-site';
+import { updateBlogInput } from '@milendrakumarbaghel/blogging-site';
 
 export const blogController = new Hono<{
 	Bindings: {
