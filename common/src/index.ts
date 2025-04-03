@@ -2,13 +2,13 @@ import zod from 'zod';
 
 export const signupInput = zod.object({
     email: zod.string().email(),
-    password: zod.string().min(6),
+    password: zod.string().min(4),
     name: zod.string().optional(),
 });
 
 export const signinInput = zod.object({
     email: zod.string().email(),
-    password: zod.string().min(6)
+    password: zod.string().min(4)
 });
 
 export const createBlogInput = zod.object({
