@@ -18,7 +18,7 @@ export const blogController = new Hono<{
 
 authMiddleware(blogController);
 
-blogController.post('/', async (c: Context) => {
+blogController.post('/createBlog', async (c: Context) => {
 	const userId = c.get('userId');
 	console.log(userId);
 	if (!userId) {
@@ -48,7 +48,7 @@ blogController.post('/', async (c: Context) => {
 	return c.json({ id: post.id });
 });
 
-blogController.put('/updateblog', async (c: Context) => {
+blogController.put('/updateBlog', async (c: Context) => {
 	const userId = c.get('userId');
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL,
@@ -76,7 +76,7 @@ blogController.put('/updateblog', async (c: Context) => {
 	return c.text('Updated post');
 });
 
-blogController.get('/findblog/:id', async (c: Context) => {
+blogController.get('/findBlog/:id', async (c: Context) => {
 	const id = c.req.param('id');
 	const prisma = new PrismaClient({
 		datasourceUrl: c.env?.DATABASE_URL,
