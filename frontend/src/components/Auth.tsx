@@ -3,8 +3,6 @@ import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const navigate = useNavigate();
     const [postInputs, setPostInputs] = useState<SignupInput>({
@@ -16,7 +14,7 @@ export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     async function sendRequest() {
         try {
             const response = await axios.post(
-                `${BACKEND_URL}/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
+                `/api/v1/user/${type === "signup" ? "signup" : "signin"}`,
                 postInputs
             );
 

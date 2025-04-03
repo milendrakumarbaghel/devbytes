@@ -3,8 +3,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { ChangeEvent, useState } from "react";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
 export const Publish = () => {
     const [title, setTitle] = useState("");
     const [description, setDescription] = useState("");
@@ -22,7 +20,7 @@ export const Publish = () => {
                     setDescription(e.target.value)
                 }} />
                 <button onClick={async () => {
-                    const response = await axios.post(`${BACKEND_URL}/api/v1/blog`, {
+                    const response = await axios.post(`/api/v1/blog`, {
                         title,
                         content: description
                     }, {

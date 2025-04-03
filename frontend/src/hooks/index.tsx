@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
-
-
 export interface Blog {
   "content": string,
   "title": string,
@@ -19,7 +16,7 @@ export const useBlog = ({ id }: { id: string }) => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/api/v1/blog/${id}`, {
+        const response = await axios.get(`/api/v1/blog/${id}`, {
           headers: {
             Authorization: localStorage.getItem("token"),
           },
@@ -46,7 +43,7 @@ export const useBlogs = () => {
   useEffect(() => {
     const fetchBlogs = async () => {
       try {
-        const response = await axios.get(`${BACKEND_URL}/api/v1/blog/bulk`, {
+        const response = await axios.get(`/api/v1/blog/bulk`, {
           headers: {
             Authorization: localStorage.getItem("token"),
           },

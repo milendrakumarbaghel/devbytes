@@ -7,7 +7,7 @@ export const AppBar = () => {
       <div className="flex items-center">
         <Link to={`/blogs`}>
           <div className="font-bold text-lg flex items-center cursor-pointer">
-            Medium
+            DevByte
           </div>
         </Link>
       </div>
@@ -30,7 +30,7 @@ export const AppBar = () => {
             New Blog
           </button>
         </Link>
-        <Avatar size={2} name="Nimit" />
+        <Avatar size={2} name="SPY" />
       </div>
     </div>
   );
