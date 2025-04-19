@@ -1,4 +1,4 @@
-import { SignupInput } from "@milendrakumarbaghel/blogging-site";
+import { SignupInput } from "@milendra/blogging-site";
 import { useState } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,7 +7,7 @@ import { Link, useNavigate } from "react-router-dom";
 export const Auth = ({ type }: { type: "signup" | "signin" }) => {
     const navigate = useNavigate();
     const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || "";
-    
+
     const [postInputs, setPostInputs] = useState<SignupInput>({
         name: "",
         email: "",

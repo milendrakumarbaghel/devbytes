@@ -1,5 +1,5 @@
 {
-  "name": "@milendrakumarbaghel/blogging-site",
+  "name": "@milendra/blogging-site",
   "version": "1.0.1",
   "main": "dist/index.js",
   "scripts": {
@@ -10,6 +10,7 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@milendra/blogging-site": "^1.0.1",
     "typescript": "^5.8.2",
     "zod": "^3.24.2"
   }
