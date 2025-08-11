@@ -11,7 +11,10 @@ const app = new Hono<{
 }>();
 
 app.use('*', cors({
-	origin: 'http://localhost:5173', // Change this to your frontend URL in production
+	origin: [
+      'http://localhost:5173',
+      'https://devbytes-tau.vercel.app',
+    ],
 	allowMethods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
 	allowHeaders: ['Content-Type', 'Authorization'],
 	credentials: true
